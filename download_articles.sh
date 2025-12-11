@@ -64,7 +64,7 @@ sleepbar()
 echo "Logging in..."
 curlparams="--no-progress-meter -b ${curl_session_file} -c ${curl_session_file} -k -L"
 curl ${curlparams} "https://www.heise.de/sso/login" >/dev/null 2>&1
-curl ${curlparams} -F 'forward=' -F "username=${email}" -F "password=${password}" -F 'ajax=1' "https://www.heise.de/sso/login/login" -o ${curl_session_file}.html
+curl ${curlparams} --data-urlencode 'forward=' --data-urlencode "username=${email}" --data-urlencode "password=${password}" --data-urlencode 'ajax=1' "https://www.heise.de/sso/login/login" -o ${curl_session_file}.html
 token1=$(cat ${curl_session_file}.html | sed "s/token/\ntoken/g" | grep ^token | head -1 | cut -f 3 -d '"')
 token2=$(cat ${curl_session_file}.html | sed "s/token/\ntoken/g" | grep ^token | head -2 | tail -1 | cut -f 3 -d '"')
 curl ${curlparams} -F "token=${token1}" "https://m.heise.de/sso/login/remote-login" >/dev/null 2>&1
